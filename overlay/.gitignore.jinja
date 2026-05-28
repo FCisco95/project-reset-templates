@@ -1,0 +1,42 @@
+# Stack-aware additions appended to whatever the stack bootstrapper wrote
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Caches
+.copier-answers.local.yml
+{% if stack.startswith('nextjs') %}
+.next/
+.vercel/
+.turbo/
+{% endif %}
+{% if stack == 'python-uv' %}
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+{% endif %}
+{% if stack == 'rust-cli' %}
+target/
+{% endif %}

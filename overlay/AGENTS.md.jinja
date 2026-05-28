@@ -1,0 +1,45 @@
+# AGENTS.md — {{ project_name }}
+
+## What this is
+{{ project_why }}
+
+## Stack
+- {{ stack }}
+- (Add specific versions + key libs here when scaffolding completes)
+
+## Where things live
+| Concern | Path |
+|---|---|
+| AI calls | `lib/ai/` |
+| DB schema | `src/server/db/schema.ts` |
+| Routes | `src/app/` |
+| Components | `src/components/` |
+| Specs / plans | `docs/superpowers/{specs,plans}/` |
+| Tasks | `TASKS/` |
+| North star | `docs/NORTH-STAR.md` ← READ FIRST when lost |
+| Handoff | `docs/HANDOFF.md` |
+
+## Commands
+- Dev: `pnpm dev`
+- Build: `pnpm build`
+- Test: `pnpm test`
+- Lint: `pnpm lint`
+- DB migrate: `pnpm db:push`
+
+## Conventions
+- Conventional commits (enforced by commit-msg hook)
+- Server Components by default; `"use client"` only at leaves that need state/effects/browser APIs
+- All AI calls go through `lib/ai/`; never client-side
+- Env vars defined in `src/env.js` via `@t3-oss/env-nextjs`
+
+## What NOT to do
+- Don't add packages without discussion
+- Don't use Pages Router
+- Don't put AI calls client-side
+- Don't commit `.env` or any file containing secrets
+- Don't bypass commit hooks (`--no-verify`)
+
+## Common pitfalls
+- T3 picks Biome OR ESLint at init — do not add the other; they fight
+- Drizzle migrations live in `drizzle/`; never edit them by hand after generation
+- Tailwind v4 needs the codemod if you upgrade from v3
