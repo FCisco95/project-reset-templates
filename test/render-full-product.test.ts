@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { execSync } from "node:child_process";
-import { mkdtempSync, rmSync, existsSync, readFileSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -76,7 +76,42 @@ describe("full-product render (overlay + archetype)", () => {
     expect(ns).toContain("project: fp-test");
     expect(ns).toContain("Test the north star render.");
     expect(ns).toContain("By 2026-12-31: integration test passes.");
-    expect(ns).toContain("score: 100/100");
+    expect(ns).toContain("score: pending");
+  });
+
+  it("skips overwriting existing user-curated files on second render (restructure safety)", () => {
+    outDir = renderFullProduct({
+      project_name: "fp-test",
+      project_why: "First render.",
+      win_condition: "By 2026-12-31: x.",
+      author_name: "Cisco Vieira", author_email: "x",
+      year: "2026", today: "2026-05-29",
+      archetype: "full-product", stack: "nextjs-t3",
+    });
+
+    // Simulate the user editing HANDOFF.md
+    const handoffPath = join(outDir, "docs/HANDOFF.md");
+    const sentinel = "USER_EDITED_DO_NOT_OVERWRITE";
+    writeFileSync(handoffPath, sentinel);
+
+    // Re-render with --overwrite (simulating restructure mode)
+    const dataArgs = Object.entries({
+      project_name: "fp-test",
+      project_why: "Second render — different why.",
+      win_condition: "By 2026-12-31: x.",
+      author_name: "Cisco Vieira", author_email: "x",
+      year: "2026", today: "2026-05-29",
+      archetype: "full-product", stack: "nextjs-t3",
+    }).map(([k, v]) => `--data ${k}="${v}"`).join(" ");
+
+    execSync(
+      `copier copy "${REPO}/full-product" "${outDir}" --defaults --trust --overwrite ${dataArgs}`,
+      { stdio: "pipe" }
+    );
+
+    // HANDOFF.md should still contain the sentinel — copier respected _skip_if_exists
+    const handoffAfter = readFileSync(handoffPath, "utf-8");
+    expect(handoffAfter).toBe(sentinel);
   });
 
   it("settings.json includes the check-north-star Stop hook", () => {

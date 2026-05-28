@@ -53,8 +53,10 @@ function checkClaudeMd() {
   const a = read("AGENTS.md");
   if (!c) return { points: 0, max: 5, note: "missing" };
   if (!a) return { points: 0, max: 5, note: "AGENTS.md missing — can't validate match" };
-  if (c.trim() === a.trim()) return { points: 5, max: 5, note: "matches AGENTS.md" };
-  return { points: 2, max: 5, note: "exists but differs from AGENTS.md" };
+  const trimmed = c.trim();
+  if (trimmed === "@AGENTS.md") return { points: 5, max: 5, note: "imports AGENTS.md (@-import pattern)" };
+  if (trimmed === a.trim()) return { points: 5, max: 5, note: "matches AGENTS.md" };
+  return { points: 2, max: 5, note: "exists but differs from AGENTS.md (use '@AGENTS.md' import or copy)" };
 }
 
 function checkHandoff() {

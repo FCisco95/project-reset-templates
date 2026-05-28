@@ -78,6 +78,21 @@ describe("score_project.mjs", () => {
     expect(a.points).toBe(0);
   });
 
+  it("recognizes @AGENTS.md import as equivalent to a copy (full 5 pts)", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    dir = mkproject({
+      "docs/NORTH-STAR.md": `---\nproject: x\nupdated: ${today}\nstatus: building\nscore: pending\n---\n\n# WHY\nReason.\n\n# WIN CONDITION\nBy 2026-12-31: win.\n\n# NOT DOING\n- a\n\n# NEXT STEP\nDo a.\n`,
+      "AGENTS.md": "# AGENTS\n\n## What this is\nx\n\n## Where things live\n| Concern | Path |\n|---|---|\n| ai | lib/ai/ |\n\n## Commands\n- Dev: pnpm dev\n\n## Conventions\n- conv\n\n## What NOT to do\n- dont\n",
+      "CLAUDE.md": "@AGENTS.md",
+      "README.md": `# x\n\nStatus: 🟡 Active\n`,
+      ".gitignore": "node_modules/\n.env\n",
+    });
+    const result = runScorer(dir);
+    const claudeMd = result.findings.find((f: any) => f.dim === "claude-md");
+    expect(claudeMd.points).toBe(5);
+    expect(claudeMd.note).toMatch(/import/i);
+  });
+
   it("emits human-readable output without --json", () => {
     dir = mkproject({ "README.md": "# x\n" });
     const out = execSync(`node "${SCORER}"`, { cwd: dir, encoding: "utf-8" });
