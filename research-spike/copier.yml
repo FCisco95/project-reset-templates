@@ -1,0 +1,27 @@
+_min_copier_version: "9.0.0"
+_templates_suffix: ".jinja"
+_envops:
+  keep_trailing_newline: true
+
+project_name:
+  type: str
+project_why:
+  type: str
+win_condition:
+  type: str
+  default: "Time-boxed research — kill or convert by <YYYY-MM-DD>"
+author_name:
+  type: str
+  default: "Cisco Vieira"
+year:
+  type: str
+  default: "{{ '%Y' | strftime }}"
+today:
+  type: str
+  default: "{{ '%Y-%m-%d' | strftime }}"
+archetype:
+  type: str
+  default: "research-spike"
+stack:
+  type: str
+  default: "python-uv"
