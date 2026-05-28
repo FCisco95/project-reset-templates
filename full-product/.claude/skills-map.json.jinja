@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "marketplace": "FCisco95/claude-skills",
+  "project": "{{ project_name }}",
+  "global": ["find-skills", "handoff", "handoff-memory", "adhd-task-management"],
+  "plugins": [
+    {%- if stack.startswith('nextjs') %}
+    "graphify",
+    "multi-reviewer-patterns",
+    "humanizer",
+    "tavily-research"
+    {%- endif %}
+    {%- if stack == 'python-uv' %}
+    "graphify",
+    "multi-reviewer-patterns"
+    {%- endif %}
+  ],
+  "note": "Curated at scaffold time. Re-run skill-curator to refresh."
+}
