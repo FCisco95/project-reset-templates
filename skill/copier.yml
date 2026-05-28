@@ -1,0 +1,26 @@
+_min_copier_version: "9.0.0"
+_templates_suffix: ".jinja"
+_envops:
+  keep_trailing_newline: true
+
+project_name:
+  type: str
+project_why:
+  type: str
+win_condition:
+  type: str
+author_name:
+  type: str
+  default: "Cisco Vieira"
+year:
+  type: str
+  default: "{{ '%Y' | strftime }}"
+archetype:
+  type: str
+  default: "skill"
+stack:
+  type: str
+  default: "cc-skill"
+today:
+  type: str
+  default: "{{ '%Y-%m-%d' | strftime }}"
