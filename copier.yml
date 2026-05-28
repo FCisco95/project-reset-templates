@@ -1,0 +1,14 @@
+# project-reset-templates — root config (informational; per-subdir copier.yml are authoritative)
+_min_copier_version: "9.0.0"
+_envops:
+  keep_trailing_newline: true
+_templates_suffix: ".jinja"
+
+# This repo is rendered in two passes by the /project-reset skill:
+#   1. copier copy <repo>/overlay <target>
+#   2. copier copy <repo>/<archetype> <target> --overwrite
+#
+# Each subdir contains its own copier.yml with its required prompts.
+# Shared prompts (project_name, project_why, author_name, ...) are duplicated
+# across overlay/copier.yml and <archetype>/copier.yml so each render pass is
+# self-contained.

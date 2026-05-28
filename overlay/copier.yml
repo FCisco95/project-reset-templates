@@ -1,0 +1,24 @@
+_min_copier_version: "9.0.0"
+_templates_suffix: ".jinja"
+_envops:
+  keep_trailing_newline: true
+
+project_name:
+  type: str
+project_why:
+  type: str
+author_name:
+  type: str
+  default: "Cisco Vieira"
+author_email:
+  type: str
+  default: "cisco.vieira25@gmail.com"
+year:
+  type: str
+  default: "{{ '%Y' | strftime }}"
+archetype:
+  type: str
+  default: "full-product"
+stack:
+  type: str
+  default: "nextjs-t3"
